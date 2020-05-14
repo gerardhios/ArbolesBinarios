@@ -1,4 +1,4 @@
-# ArbolesBinariosRosy
+# ArbolesBinarios
 Programa en C++ en el que:
 1. Inserta nodos a un árbol.
 2. Muestra el árbol por el Método de Búsqueda Binaria.
