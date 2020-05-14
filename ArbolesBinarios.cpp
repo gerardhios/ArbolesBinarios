@@ -65,6 +65,22 @@ void insertarNodo(Nodo *&arbol, int n){
 	}
 }
 
+//Funcion para buscar un nodo e indiciar si existe o no el nodo
+bool buscarNodo(Nodo *arbol, int n){
+	if(arbol == NULL){//Si el arbol esta vacio regresamos false
+		return false;
+	}
+	else if(arbol->dato == n){//Encontramos el dato en el nodo actual
+		return true;
+	}
+	else if(n<arbol->dato){//Si el nodo que estamos buscando es menor que el nodo actual le pasamos a la funcion el nodo del lado izquierdo
+		return buscarNodo(arbol->izq,n);
+	}
+	else{//si el nodo que estamos buscando es mayor que el nodo actual le pasamos a la funcion el nodo del lado derecho
+		return buscarNodo(arbol->der,n);
+	}
+}
+
 //Función para mostrar el arbol completo
 void mostrarArbol(Nodo *arbol, int cnt){
 	if (arbol == NULL){//Si el árbol esta vacio
@@ -91,24 +107,41 @@ void menu()
 		cout<<"\t <<<< M E N U >>>>"<<endl;
 		cout<<"1. Insertar nodo"<<endl;
 		cout<<"2. Mostrar arbol"<<endl;
-		cout<<"3. Salir"<<endl;
+		cout<<"3. Buscar nodo"<<endl;
+		cout<<"4. Salir"<<endl;
 		cin>>opcion;
 		switch(opcion)
 		{
-			case 1: cout<<"\n Digite un numero: ";
+			case 1: 
+				cout<<"\n Digite un número: ";
  				cin>>dato;
  				insertarNodo(arbol, dato); //Insertar un nuevo nodo
  				cout<<"\n";
  				system("PAUSE");
  				break;
-			case 2: cout<<"\nMostrar Arbol"<<endl<<endl;
+			case 2: 
+				cout<<"\nMostrar Arbol"<<endl<<endl;
 				mostrarArbol(arbol,contador);
 				cout<<endl;
 				system("PAUSE");
 				break;
+			case 3:
+				cout<<"\n Digite el número a buscar: ";
+				cin>>dato;
+				//Buscamos el dato introducido
+				if(buscarNodo(arbol,dato)){//Si se encuentra el dato la funcion buscarNodo regresa true
+					cout<<"\nSe encontro el dato: "<<dato;
+				}
+				else{//Si no se encuentra la funcion regresa un false
+					cout<<"\nNo se encontro el dato: "<<dato;					
+				}
+				cout<<endl;
+				system("PAUSE");
+				break;
+				
 		}
 		system("cls");
-	}while(opcion != 3);
+	}while(opcion != 4);
 }
 
 int main()
