@@ -38,7 +38,7 @@ struct Nodo{
 	Nodo *izq;
 };
 Nodo *arbol = NULL;
-
+int contalt=0;
 //Funcion para crear nuevos nodos
 Nodo * crearNodo(int n){
 	Nodo *newnodo = new Nodo();
@@ -81,6 +81,26 @@ bool buscarNodo(Nodo *arbol, int n){
 	}
 }
 
+//Funcion para mostrar la altura de un nodo especifico
+void alturaNodo(Nodo *arbol, int n){
+	if(arbol == NULL){//Revisamos si el arbol esta vacio
+		return;
+	}
+	else{
+		contalt++;
+		if(n == arbol->dato){
+			cout<<"\n Dato "<<n<<" encontrado en la altura "<<contalt;
+			return;
+		}
+		else if(n < arbol->dato){
+			alturaNodo(arbol->izq,n);
+		}
+		else{
+			alturaNodo(arbol->der,n);
+		}
+	}
+}
+
 //Función para mostrar el arbol completo
 void mostrarArbol(Nodo *arbol, int cnt){
 	if (arbol == NULL){//Si el árbol esta vacio
@@ -108,7 +128,8 @@ void menu()
 		cout<<"1. Insertar nodo"<<endl;
 		cout<<"2. Mostrar arbol"<<endl;
 		cout<<"3. Buscar nodo"<<endl;
-		cout<<"4. Salir"<<endl;
+		cout<<"4. Altura de un nodo"<<endl;
+		cout<<"5. Salir"<<endl;
 		cin>>opcion;
 		switch(opcion)
 		{
@@ -138,10 +159,18 @@ void menu()
 				cout<<endl;
 				system("PAUSE");
 				break;
-				
+			case 4:
+				cout<<"\n Digite el número a buscar: ";
+				cin>>dato;
+				//Buscamos la altura del dato introducido
+				contalt=0;
+				alturaNodo(arbol,dato);
+				cout<<endl;
+				system("PAUSE");
+				break;
 		}
 		system("cls");
-	}while(opcion != 4);
+	}while(opcion != 5);
 }
 
 int main()
