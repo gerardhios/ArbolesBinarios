@@ -54,9 +54,9 @@ Nodo * crearNodo(int n, Nodo *padre){
 
 void eliminar (Nodo *, int);
 void eliminarNodo(Nodo *);
+Nodo *minimo(Nodo *);
 void destruirNodo(Nodo *);
 void reemplazar(Nodo *, Nodo *);
-Nodo *minimo(Nodo *);
 
 //Funcion para insertar nodos en el arbol
 void insertarNodo(Nodo *&arbol, int n, Nodo *padre){
@@ -144,12 +144,13 @@ void eliminar (Nodo *arbol, int n){
 
 //Función para eliminar el nodo 
 void eliminarNodo(Nodo *nodoEliminar){
+	
 	if(nodoEliminar->izq && nodoEliminar->der){ //Si el nodo tiene hijo izquierdo e hijo derecho...
 		Nodo *menor = minimo(nodoEliminar->der);
 		nodoEliminar->dato = menor->dato;		//Se reemplaza el arbol eliminado con el dato menor
 		eliminarNodo(menor);					//Se elimina el menor anterior, y se repite el procedimiento si es que es necesario.
 	}
-	else if(nodoEliminar->izq){
+	else if(nodoEliminar->izq){					//Si tiene hijo izquierdo...
 		reemplazar(nodoEliminar, nodoEliminar->izq);
 		destruirNodo(nodoEliminar);
 	}
@@ -173,10 +174,10 @@ void destruirNodo(Nodo *nodo){
 void reemplazar(Nodo *arbol, Nodo *nuevoNodo){
 	if(arbol->padre){
 		//al padre se le asigna su nuevo hijo
-		if(arbol->dato == arbol->izq->dato){
+		if(arbol->dato == arbol->padre->izq->dato){
 			arbol->padre->izq = nuevoNodo;  //Si el dato es igual al hijo de la izquierda del padre, aquí se elimina.
 		}
-		if(arbol->dato == arbol->der->dato){
+		else if(arbol->dato == arbol->padre->der->dato){
 			arbol->padre->der = nuevoNodo;	//Si el dato es igual al hijo de la derecha del padre, aquí se elimina.
 		}
 	}
