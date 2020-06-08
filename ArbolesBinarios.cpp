@@ -168,14 +168,19 @@ void destruirNodo(Nodo *nodo){
 	nodo->izq = NULL;
 	nodo->der = NULL;
 	delete nodo;
+	
 }
 
 //Reemplaza dos nodos
 void reemplazar(Nodo *arbol, Nodo *nuevoNodo){
+
 	if(arbol->padre){
+		if (arbol->padre->izq){
 		//al padre se le asigna su nuevo hijo
-		if(arbol->dato == arbol->padre->izq->dato){
-			arbol->padre->izq = nuevoNodo;  //Si el dato es igual al hijo de la izquierda del padre, aquí se elimina.
+			if(arbol->dato == arbol->padre->izq->dato){
+				arbol->padre->izq = nuevoNodo;  //Si el dato es igual al hijo de la izquierda del padre, aquí se elimina.
+
+			}
 		}
 		else if(arbol->dato == arbol->padre->der->dato){
 			arbol->padre->der = nuevoNodo;	//Si el dato es igual al hijo de la derecha del padre, aquí se elimina.
@@ -183,10 +188,9 @@ void reemplazar(Nodo *arbol, Nodo *nuevoNodo){
 	}
 	if(nuevoNodo){
 		//Y al hijo se le asigna su nuevo padre
-		nuevoNodo->padre = arbol->padre; //
+		nuevoNodo->padre = arbol->padre; 
 	}
 }
-
 //Función para determinar el nodo más izquierda
 Nodo *minimo(Nodo *arbol){
 	if(arbol == NULL){ 
@@ -200,6 +204,41 @@ Nodo *minimo(Nodo *arbol){
 	}
 }
 
+
+void inOrden(Nodo *arbol){ //Recorrido inorden 
+	
+	if (arbol == NULL){//Si el árbol esta vacio
+ 		return;
+ 	}
+ 	else {
+ 		inOrden(arbol->izq);
+		cout << arbol->dato << " - ";
+		inOrden(arbol->der);
+ 	}
+}
+
+void preOrden (Nodo *arbol){
+	if (arbol == NULL){
+		return;
+	}
+	else {
+		cout << arbol->dato << " - ";
+		preOrden(arbol->izq);
+		preOrden(arbol->der);
+
+	}
+}
+
+void postOrden (Nodo *arbol){
+	if (arbol == NULL){
+		return;
+	}
+	else {
+ 		postOrden(arbol->izq);
+		postOrden(arbol->der);
+		cout << arbol->dato << " - ";
+	}
+}
 
 
 // Funcion del Menu
