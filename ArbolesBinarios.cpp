@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include<bits/stdc++.h>
 #include<String.h>
+#include<windows.h>
 using namespace std;
 /* Programa: Arbol Binario
 
@@ -40,7 +41,7 @@ struct Nodo{
 	Nodo *padre;
 };
 Nodo *arbol = NULL;
-int contalt=0;
+int contalt=0, contnodos=0, nodoencontrado=0;
 //Funcion para crear nuevos nodos
 Nodo * crearNodo(int n, Nodo *padre){
 	Nodo *newnodo = new Nodo();
@@ -92,21 +93,22 @@ bool buscarNodo(Nodo *arbol, int n){
 }
 
 //Funcion para mostrar la altura de un nodo especifico
-void alturaNodo(Nodo *arbol, int n){
+void alturaNodo(Nodo *arbol, int n, int op){
 	if(arbol == NULL){//Revisamos si el arbol esta vacio
 		return;
 	}
 	else{
-		contalt++;
+		contalt++;//Siempre iniciar esta variable antes de utilizar esta funcion
 		if(n == arbol->dato){
-			cout<<"\n Dato "<<n<<" encontrado en la altura "<<contalt;
+			if(op==0)
+				cout<<"\n Dato "<<n<<" encontrado en la altura "<<contalt;
 			return;
 		}
 		else if(n < arbol->dato){
-			alturaNodo(arbol->izq,n);
+			alturaNodo(arbol->izq,n,op);
 		}
 		else{
-			alturaNodo(arbol->der,n);
+			alturaNodo(arbol->der,n,op);
 		}
 	}
 }
@@ -240,6 +242,153 @@ void postOrden (Nodo *arbol){
 	}
 }
 
+//Funcion para mostrar el número de nodos que tiene el arbol
+void nodosArbol(Nodo *arbol){
+	if(arbol == NULL){//Revisamos si el arbol esta vacio
+		return;
+	}
+	else{
+		contnodos++;
+		nodosArbol(arbol->der);
+		nodosArbol(arbol->izq);
+	}
+}
+
+//Funcion para retornar el valor dentro de cada nodo del arbol recorriendolo por preorden
+void regresoNodos(Nodo *arbol, int indice){
+	if(arbol == NULL){//Revisamos si el nodo actual esta vacio
+		return;
+	}
+	else{
+		contalt++;
+		if(indice == contalt){//Regresamos el dato dentro del nodo que este en el indice que se pasa por parametro
+			nodoencontrado = arbol->dato;
+		}
+		else{
+			regresoNodos(arbol->izq,indice);
+			regresoNodos(arbol->der,indice);
+		}				
+	}
+}
+
+//Funcion para mostrar la altura de todo el arbol
+void alturaArbol(){
+	int i;
+	contnodos=0; 
+	nodosArbol(arbol);
+	int posynodos[contnodos][2];//Generamos una matriz de nfilas y 2 columnas, donde nfilas es el numero de nodos que hay en el arbol
+	//En la columna 0 se guardara el dato que este en el nodo actual
+	//En la columna 1 se guardara la altura del nodo actual
+	for(i=0; i<contnodos; i++){//Ciclo for que nos permite almacenar los datos y su respectiva altura de todos los nodos del arbol en la matriz posynodos
+		nodoencontrado = 0; //En cada vuelta se debe reiniciar esta variable;		
+		contalt = 0;//En cada vuelta se debe reiniciar esta variable
+		regresoNodos(arbol,i+1);
+		posynodos[i][0]=nodoencontrado;
+		contalt = 0;//Reiniciamos nuevamente la variable para buscar la altura del dato encontrado anteriormente
+		alturaNodo(arbol,nodoencontrado,1);
+		posynodos[i][1]=contalt;
+	}
+	//Ordenamos la matriz mediante el metodo de la burbuja de forma descendente para encontrar el nodo con mayor altura
+	//La cual sera la altura de todo el arbol
+	int temporal,temporal2;//Variables temporales para guardar dos datos
+	for (int i = 0 ; i < contnodos; i++){
+		for (int j = 0; j < contnodos-1; j++){
+			if (posynodos[j][1] < posynodos[j+1][1]){ //Si el número que sigue del número que estamos en el arreglo es mayor
+			temporal = posynodos[j][0];
+			temporal2 = posynodos[j][1]; 
+			posynodos[j][0] = posynodos[j+1][0]; //Cambiamos el número que seguia a la posicion del número en el que estabamos
+			posynodos[j][1] = posynodos[j+1][1]; //Cambiamos el número que seguia a la posicion del número en el que estabamos
+			posynodos[j+1][0] = temporal;//Ponemos el numero en el que estabamos a la posicion siguiente
+			posynodos[j+1][1] = temporal2;//Ponemos el numero en el que estabamos a la posicion siguiente
+			}
+		}
+	}
+	cout<<posynodos[0][1]<<endl;
+}
+
+//Función para borrar todo el arbol
+void borrarArbol(){
+	arbol = NULL;
+	cout<<endl<<"El arbol a sido borrado";
+}
+
+//Funcion para mostrar el arbol en preorden(Raiz,Izquierda,Derecha)
+void arbolPreorden(Nodo *arbol){
+	if(arbol == NULL){//Revisamos si el arbol esta vacio
+		return;
+	}
+	else{
+		cout<<" [ "<<arbol->dato<<" ] ";
+		Sleep(500);
+		arbolPreorden(arbol->izq);
+		arbolPreorden(arbol->der);
+	}
+}
+
+//Funcion para mostrar el arbol en inorden(Izquierda,Raíz,Derecha)
+void arbolInorden(Nodo *arbol){
+	if(arbol == NULL){//Revisamos si el arbol esta vacio
+		return;
+	}
+	else{		
+		arbolInorden(arbol->izq);
+		cout<<" [ "<<arbol->dato<<" ] ";
+		Sleep(500);
+		arbolInorden(arbol->der);
+	}
+}
+
+//Funcion para mostrar el arbol en postorden(Izquierda,Derecha,Raíz)
+void arbolPostorden(Nodo *arbol){
+	if(arbol == NULL){//Revisamos si el arbol esta vacio
+		return;
+	}
+	else{		
+		arbolPostorden(arbol->izq);		
+		arbolPostorden(arbol->der);
+		cout<<" [ "<<arbol->dato<<" ] ";
+		Sleep(500);
+	}
+}
+
+//Funcion del menu para los recorridos
+void menuRecorridos()
+{
+	int dato, opcion;
+	do
+	{
+		cout << "\t <<<< M E N U >>>>"<<endl;
+		cout<<"1. Recorrer el arbol en Preorden(Raíz,Izquierda,Derecha)"<<endl;
+		cout<<"2. Recorrer el arbol en Inorden(Izquierda,Raíz,Derecha)"<<endl;
+		cout<<"3. Recorrer el arbol en Postorden(Izquierda,Derecha,Raíz)"<<endl;
+		cin>>opcion;
+		switch(opcion)
+		{
+			case 1: 
+				cout<<"\nRecorrido del arbol en preorden: "<<endl<<endl;
+				arbolPreorden(arbol);
+				cout<<endl;
+				system("PAUSE");
+				return;
+				break;
+			case 2: 
+				cout<<"\nRecorrido del arbol en inorden: "<<endl<<endl;
+				arbolInorden(arbol);
+				cout<<endl;
+				system("PAUSE");
+				return;
+				break;
+			case 3: 
+				cout<<"\nRecorrido del arbol en postorden: "<<endl<<endl;
+				arbolPostorden(arbol);
+				cout<<endl<<endl;
+				system("PAUSE");
+				return;
+				break;		
+		}
+		system("cls");
+	}while(opcion != 4);
+}
 
 // Funcion del Menu
 void menu()
@@ -292,18 +441,26 @@ void menu()
 				cin>>dato;
 				//Buscamos la altura del dato introducido
 				contalt=0;
-				alturaNodo(arbol,dato);
+				alturaNodo(arbol,dato,0);
 				cout<<endl;
 				system("PAUSE");
 				break;
 			case 5: //Se obtiene la altura del arbol
-			
+				cout<<"\nLa altura del arbol es: ";
+				alturaArbol();
+				cout<<endl<<endl;
+				system("PAUSE");
 				break;
 			case 6: //Indica cuantos nodos tiene el arbol
-
+				cout<<"\nNúmero de nodos en el arbol: ";
+				contnodos=0;
+				nodosArbol(arbol);
+				cout<<contnodos<<endl<<endl;
+				system("PAUSE");
 				break;
 			case 7: //Hace recorridos en preorden, inorden y postorden
-
+				cout<<endl;
+				menuRecorridos();
 				break;
 			case 8: //Borra un nodo.
 				cout<<"\n Digite el dato que desea buscar: ";
@@ -313,7 +470,10 @@ void menu()
  				system("PAUSE");
 				break;
 			case 9: //Borra todo el arbol
-
+				cout<<"\n Borrando arbol";
+				borrarArbol();
+				cout<<endl<<endl;
+ 				system("PAUSE");
 				break;
 			case 10: //Sale del programa
 				cout << "Saliendo del programa..." << endl;
