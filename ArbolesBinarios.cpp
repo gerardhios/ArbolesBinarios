@@ -463,9 +463,27 @@ void menu()
 				menuRecorridos();
 				break;
 			case 8: //Borra un nodo.
+				contnodos = 0;
+				nodosArbol(arbol);
 				cout<<"\n Digite el dato que desea buscar: ";
  				cin>>dato;
- 				eliminar(arbol, dato); //Se llama a la función para eliminar el nodo.
+				if(contnodos > 1){//Si hay más de un dato en el arbol
+					if(buscarNodo(arbol,dato)){//Si el nodo existe dentro del arbol
+						eliminar(arbol, dato); //Se llama a la función para eliminar el nodo.
+ 						cout<<"Nodo "<<dato<<" eliminado";
+					}
+					else{
+						cout<<"El nodo "<<dato<<" no esta dentro del arbol";
+					}
+				}
+				else{//Si solo hay un nodo en el arbol
+					if(buscarNodo(arbol,dato)){//Si el nodo existe dentro del arbol
+						arbol = NULL; //Eliminamos el arbol completo
+					}
+					else{
+						cout<<"El nodo "<<dato<<" no esta dentro del arbol";
+					}
+				}				
  				cout<<"\n";
  				system("PAUSE");
 				break;
